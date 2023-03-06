@@ -16,7 +16,7 @@ app.use(morgan("combined"));
 app.use(routes);
 
 app.get("/ping", (req, res) => {
-  res.json({ message: "pong" });
+  res.status(200).json({ message: "pong" });
 });
 
 const PORT = process.env.PORT;
@@ -24,6 +24,7 @@ const PORT = process.env.PORT;
 const start = async () => {
   try {
     await appDataSource.initialize().then(() => console.log("DB Connection"));
+
     app.listen(PORT, () =>
       console.log(`🥥🥥Server is listening on ${PORT}🥥🥥`)
     );
