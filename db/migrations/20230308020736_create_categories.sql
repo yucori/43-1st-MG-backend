@@ -6,4 +6,3 @@ CREATE TABLE categories (
 
 -- migrate:down
 DROP TABLE categories;
-

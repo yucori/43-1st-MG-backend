@@ -2,7 +2,7 @@
 CREATE TABLE orders (
  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
  user_id INT NOT NULL,
- order_id INT NOT NULL,
+ order_number VARCHAR(100) NOT NULL,
  address_id INT NULL,
  delivery_request VARCHAR(2000),
  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
