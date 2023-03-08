@@ -23,7 +23,82 @@ const showProducts = async (categoryId) => {
   }
 };
 
+const showAllProducts = async () => {
+  try {
+    return await appDataSource.query(
+      `SELECT *
+        FROM products
+      `
+    );
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
+const newProduct = async (productName, stock, price, thumbnail, categoryId) => {
+  try {
+    return await appDataSource.query(
+      `INSERT INTO products(
+        name,
+        stock,
+        price,
+        thumbnail,
+        category_id
+      )VALUES(?, ?, ?, ?, ?);
+      `,
+      [productName, stock, price, thumbnail, categoryId]
+    );
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
+const updateProduct = async (
+  productId,
+  productName,
+  stock,
+  price,
+  thumbnail,
+  categoryId
+) => {
+  try {
+    console.log(stock);
+    await appDataSource.query(
+      `UPDATE products
+          SET
+          name = ?,
+          stock = ?,
+          price = ?,
+          thumbnail = ?,
+          category_id = ?
+        WHERE id = ?
+      `,
+      [productName, stock, price, thumbnail, categoryId, productId]
+    );
+
+    const result = await appDataSource.query(
+      `SELECT *
+        FROM products
+        WHERE id = ?
+      `,
+      [productId]
+    );
+    return result;
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUTT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
 module.exports = {
   showProducts,
+  showAllProducts,
+  newProduct,
+  updateProduct,
 };
 //limit offset
