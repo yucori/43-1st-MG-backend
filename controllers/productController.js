@@ -2,12 +2,16 @@ const productService = require("../services/productService");
 
 const productsInqury = async (req, res) => {
   try {
-    let { categoryId } = req.params;
+    const { categoryId } = req.params;
+    const { limit, offset } = req.body;
     if (!categoryId) {
       return res.status(400).json({ message: "KEY_ERROR" });
     }
-    console.log(categoryId);
-    const productsInqury = await productService.productsInqury(categoryId);
+    const productsInqury = await productService.productsInqury(
+      categoryId,
+      limit,
+      offset
+    );
     return res.status(200).json({
       data: productsInqury,
     });

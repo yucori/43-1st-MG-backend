@@ -1,21 +1,26 @@
 const { appDataSource } = require("./data-source");
 
-const showProducts = async (categoryId) => {
+const showProducts = async (categoryId, limit, offset) => {
   try {
     let query = `SELECT
-            products.id AS products_id,
-            products.name AS products_name,
-            products.price,
-            products.thumbnail,
-            products.category_id,
-            categories.name AS category_name
-          FROM products
-          JOIN categories ON products.category_id = categories.id`;
+          products.id AS products_id,
+          products.name AS products_name,
+          products.price,
+          products.thumbnail,
+          products.category_id,
+          categories.name AS category_name
+        FROM products
+        JOIN categories ON products.category_id = categories.id
+        GROUP BY products.id
+      `;
     if (categoryId !== "0") {
-      query += `Where products_id = ?`;
-      return await appDataSource.query(query, [categoryId]);
+      query += ` WHERE products.category_id = ?`;
+    }
+    query += ` LIMIT ? OFFSET ?`;
+    if (categoryId !== "0") {
+      return await appDataSource.query(query, [categoryId, limit, offset]);
     } else {
-      return await appDataSource.query(query);
+      return await appDataSource.query(query, [limit, offset]);
     }
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
@@ -27,4 +32,3 @@ const showProducts = async (categoryId) => {
 module.exports = {
   showProducts,
 };
-//limit offset
