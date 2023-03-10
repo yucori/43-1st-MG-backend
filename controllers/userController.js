@@ -21,9 +21,6 @@ const signUp = catchAsync(async (req, res) => {
 const signIn = async(req, res) => {
   const {email, password} = req.body;
   
-  emailValidator(email);
-  passwordValidator(password);
-
   try {
     const accessToken = await userService.signIn(email, password)
     res.status(200).json({ accessToken })    

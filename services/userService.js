@@ -18,15 +18,22 @@ const signUp = async( userName, password, email, phoneNumber, address, birth, ge
 
 const signIn = async( email, password ) => { 
   const user = await userDao.getUserByEmail(email);
+
+  if(!user){
+    const error = new Error('WRONG_EMAIL')
+    error.statusCode = 401;
+
+    throw error;
+  }
   const match = await bcrypt.compare(password, user.password);
 
   if(!match){
     const error = new Error('WRONG_PASSWORD')
-    error.statusCode = 400;
+    error.statusCode = 401;
 
     throw error;
   }
-  
+
   const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET,
     {
       algorithm: process.env.ALGORITHM,
