@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
-
 const userDao  = require('../models/userDao')
+const jwt = require('jsonwebtoken')
 
 const hashPassword = async ( plaintextPassword ) => {
   const saltRounds = 10;
@@ -15,6 +15,29 @@ const signUp = async( userName, password, email, phoneNumber, address, birth, ge
   return userDao.createUser(userName, hashedPassword, email, phoneNumber, address, birth, gender, point)
 }
 
+
+const signIn = async( email, password ) => { 
+  const user = await userDao.getUserByEmail(email);
+  const match = await bcrypt.compare(password, user.password);
+
+  if(!match){
+    const error = new Error('WRONG_PASSWORD')
+    error.statusCode = 400;
+
+    throw error;
+  }
+  
+  const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET,
+    {
+      algorithm: process.env.ALGORITHM,
+      expiresIn: process.env.JWT_EXPIRES_IN
+    }
+  )
+ return accessToken;
+}
+
+
 module.exports = {
-  signUp
+  signUp,
+  signIn
 }
