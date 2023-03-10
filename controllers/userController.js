@@ -1,27 +1,32 @@
 const userService = require('../services/userService')
 const { catchAsync } = require('../utils/error')
-
-
+const { emailValidator, passwordValidator } = require('../utils/validator')
 const signUp = catchAsync(async (req, res) => {
-  const { userName, password, passwordConfirm, email, phoneNumber, address, birth, gender, point} = req.body;
+  const { userName, password, email, phoneNumber, address, birth, gender, point} = req.body;
   
   if ( !userName || !password || !email || !phoneNumber || !address || !birth || !gender || point === undefined){
     return res.status(400).json({ message: "KEY_ERROR" });
   }
-  const insertId = await userService.signUp(userName, password, email, phoneNumber, address, birth, gender, point);
-  res.status(201).json({ insertId });
-
+  emailValidator(email);
+  passwordValidator(password);
+  await userService.signUp(userName, password, email, phoneNumber, address, birth, gender, point);
+  res.status(201).json({ message: "SUCCESS" });
 })
 
 
-const userUpdate = catchAsync(async (req, res) => {
-  const { password, phoneNumber, address } = req.body;
+const signIn = async(req, res) => {
+  const {email, password} = req.body;
 
-  await userService.updateUserInfo( password, phoneNumber, address );
-  return res.status(200).json({ message: " UPDATED USER INFORMATION "})
-})
+  try {
+    const accessToken = await userService.signIn(email, password)
+    res.status(200).json({ accessToken })    
+  } catch (error) {
+    res.status(error.statusCode).json({ message: error.message })
+  }
+}
 
 
 module.exports = {
-  signUp
+  signUp,
+  signIn
 }
