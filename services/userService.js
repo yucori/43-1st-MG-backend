@@ -21,12 +21,7 @@ const signUp = async( userName, password, email, phoneNumber, address, birth, ge
   return userDao.createUser( userName, hashedPassword, email, phoneNumber, address, birth, gender, point )
 }
 
-const updateUserInfo = async( password, phoneNumber, address ) => {
-  return await userDao.updateUser( password, phoneNumber, address );
-}
-
 
 module.exports = {
   signUp,
-  updateUserInfo
 }
