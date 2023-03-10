@@ -2,8 +2,9 @@ const productService = require("../services/productService");
 
 const productsInqury = async (req, res) => {
   try {
-    const { categoryId } = req.params;
-    const { limit, offset } = req.body;
+    let { categoryId, limit, offset } = req.query;
+    limit = parseInt(limit);
+    offset = parseInt(offset);
     if (!categoryId) {
       return res.status(400).json({ message: "KEY_ERROR" });
     }

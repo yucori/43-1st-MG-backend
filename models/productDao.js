@@ -2,6 +2,7 @@ const { appDataSource } = require("./data-source");
 
 const showProducts = async (categoryId, limit, offset) => {
   try {
+    let params = [limit, offset];
     let query = `SELECT
           products.id AS products_id,
           products.name AS products_name,
@@ -10,21 +11,18 @@ const showProducts = async (categoryId, limit, offset) => {
           products.category_id,
           categories.name AS category_name
         FROM products
-        JOIN categories ON products.category_id = categories.id
-        ORDER BY products.id DESC
-      `;
+        JOIN categories ON products.category_id = categories.id`;
+
     if (categoryId !== "0") {
       query += ` WHERE products.category_id = ?`;
+      params = [categoryId, ...params];
     }
-    query += ` LIMIT ? OFFSET ?`;
-    if (categoryId !== "0") {
-      return await appDataSource.query(query, [categoryId, limit, offset]);
-    } else {
-      return await appDataSource.query(query, [limit, offset]);
-    }
+    query += ` ORDER BY products.id DESC LIMIT ? OFFSET ?`;
+
+    return await appDataSource.query(query, params);
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
+    error.statusCode = 400;
     throw error;
   }
 };
