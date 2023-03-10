@@ -20,7 +20,6 @@ const signUp = catchAsync(async (req, res) => {
 
 const signIn = async(req, res) => {
   const {email, password} = req.body;
-
   
   emailValidator(email);
   passwordValidator(password);
