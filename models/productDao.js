@@ -11,7 +11,7 @@ const showProducts = async (categoryId, limit, offset) => {
           categories.name AS category_name
         FROM products
         JOIN categories ON products.category_id = categories.id
-        GROUP BY products.id
+        ORDER BY products.id DESC
       `;
     if (categoryId !== "0") {
       query += ` WHERE products.category_id = ?`;
