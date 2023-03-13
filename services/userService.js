@@ -20,7 +20,7 @@ const signIn = async( email, password ) => {
   const user = await userDao.getUserByEmail(email);
 
   if(!user){
-    const error = new Error('WRONG_EMAIL')
+    const error = new Error('INVALID_USER')
     error.statusCode = 401;
 
     throw error;
@@ -28,7 +28,7 @@ const signIn = async( email, password ) => {
   const match = await bcrypt.compare(password, user.password);
 
   if(!match){
-    const error = new Error('WRONG_PASSWORD')
+    const error = new Error('INVALID_USER')
     error.statusCode = 401;
 
     throw error;
