@@ -31,11 +31,11 @@ const showProductDetail = async (productId) => {
   try {
     return await appDataSource.query(
       `SELECT
-          products.id as productId,
-          products.name as productName,
-          categories.id as categoryId,
-          categories.name as categoryName,
-          products.description as description,
+          products.id AS productId,
+          products.name AS productName,
+          categories.id AS categoryId,
+          categories.name AS categoryName,
+          products.description AS description,
           products.stock,
           products.price,
           products.thumbnail,
