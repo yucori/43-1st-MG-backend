@@ -26,6 +26,11 @@ const signUp = catchAsync(async (req, res) => {
   ) {
     return res.status(400).json({ message: "KEY_ERROR" });
   }
+  
+  if (password != passwordConfirm) {
+    return res.status(400).json({ message: "PASSWORD_UNMATCHED" });
+  }
+  
   emailValidator(email);
   passwordValidator(password);
   await userService.signUp(
@@ -48,7 +53,29 @@ const signIn = catchAsync(async (req, res) => {
   res.status(200).json({ accessToken });
 });
 
+const updateUserInfo = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { password, phoneNumber, address} = req.body;
+
+    if(!password || !phoneNumber || !address) {
+      const error = new Error('KEY_ERROR')
+      error.statusCode = 400;
+  
+      throw error;
+    }
+    await userService.updatedUserInfo(
+      userId,
+      password,
+      phoneNumber,
+      address
+    );
+    return res.status(200).json({ message:"UPDATE USER INFO"})
+  }
+)
+
+
 module.exports = {
   signUp,
   signIn,
-};
+  updateUserInfo
+}

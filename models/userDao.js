@@ -17,12 +17,12 @@ const createUser = async(userName, password, email, phoneNumber, address, birth,
 }
 
 
-const getUserByEmail = async (email) => {
+const getUserByEmail = async () => {
   const result = await appDataSource.query(`
     SELECT
       id,
       name, 
-      password, 
+      password, email
       email, 
       phone_number, 
       address, 
@@ -35,8 +35,59 @@ const getUserByEmail = async (email) => {
   return result[0]
 }
 
+const getUserById = async (id) => {
+  const result = await appDataSource.query(`
+    SELECT
+      id,
+      name, 
+      password, email
+      email, 
+      phone_number, 
+      address, 
+      birth, 
+      gender,
+      point
+    FROM users
+    WHERE id=?`, [id]
+  )
+  return result[0]
+}
+
+
+const updateUser = async ( userId, password, phoneNumber, address ) => {
+  try {
+    await appDataSource.query(`
+    UPDATE
+      users
+    SET
+      password=?,
+      phone_number=?,
+      address=?
+    WHERE id=?
+    `,
+    [ password, phoneNumber, address, userId]
+  );
+
+    const result = await appDataSource.query(
+      `SELECT *
+        FROM users
+        WHERE id=?
+      `,
+      [userId]
+    );
+
+    return result;
+  }catch(err) {
+    const error = new Error('KEY ERROR')
+    error.statusCode = 500;
+    throw error;
+  }
+} 
+
 
 module.exports = {
   createUser,
-  getUserByEmail
+  getUserByEmail,
+  getUserById,
+  updateUser
 }

@@ -34,7 +34,7 @@ const signIn = async( email, password ) => {
     throw error;
   }
 
-  const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET,
+  const accessToken = jwt.sign({ id : user.id }, process.env.JWT_SECRET,
     {
       algorithm: process.env.ALGORITHM,
       expiresIn: process.env.JWT_EXPIRES_IN
@@ -44,7 +44,17 @@ const signIn = async( email, password ) => {
 }
 
 
+const updatedUserInfo = async ( userId, password, phoneNumber, address) => {
+  return await userDao.updateUser(
+    userId,
+    password, 
+    phoneNumber,
+    address
+  );
+}
+
 module.exports = {
   signUp,
-  signIn
+  signIn,
+  updatedUserInfo
 }
