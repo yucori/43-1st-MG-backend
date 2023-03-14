@@ -27,17 +27,16 @@ const showProducts = async (categoryId, limit, offset) => {
   }
 };
 
-const showProductNum = async (categoryId) => {
+const showProductNum = async () => {
   try {
     let query = `SELECT
-        COUNT(*) as cnt FROM products`;
-
-    if (categoryId !== "0") {
-      query += ` WHERE category_id = ?`;
-      return await appDataSource.query(query, [categoryId]);
-    } else {
-      return await appDataSource.query(query);
-    }
+    categories.id AS categoryId,
+    categories.name AS categoryName,
+    COUNT(products.id) AS count
+  FROM categories
+  JOIN products ON products.category_id = categories.id
+  GROUP BY categories.id`;
+    return await appDataSource.query(query);
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 400;
