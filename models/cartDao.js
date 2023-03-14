@@ -1,16 +1,15 @@
 const { appDataSource } = require('./data-source')
 
-const getCartById = async(userId) => {
-  const cart = await appDataSource.query(`
-    SELECT 
-      cart.id AS cart_id,
-      products.id AS products_id,
-      cart.quantity,
-      products.name AS products_name,
-    FROM
-      cart, products
-    AND 
-      user_id =?
+const createIntoCart = async(userId) => {
+  const result = await appDataSource.query(`
+    INSERT INTO cart(user_id, product_id, quantity)
+     VALUES (?,?,?) 
+  `,[user_id. product_id, quantity]
+  );
+  return result.insertId
+}
+ 
 
-  `)
+module.exports = {
+  createIntoCart
 }

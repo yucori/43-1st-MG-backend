@@ -27,6 +27,39 @@ const showProducts = async (categoryId, limit, offset) => {
   }
 };
 
+const showProductDetail = async (productId) => {
+  try {
+    return await appDataSource.query(
+      `SELECT
+          products.id AS productId,
+          products.name AS productName,
+          categories.id AS categoryId,
+          categories.name AS categoryName,
+          products.description AS description,
+          products.stock,
+          products.price,
+          products.thumbnail,
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              "productImageId", product_images.id,
+              "productImageUrl", product_images.url
+            )
+          )AS images
+        FROM products
+        LEFT JOIN product_images ON product_images.product_id = products.id
+        JOIN categories ON categories.id = products.category_id
+        WHERE products.id = ?
+      `,
+      [productId]
+    );
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 00;
+    throw error;
+  }
+};
+
 module.exports = {
   showProducts,
+  showProductDetail,
 };
