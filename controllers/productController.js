@@ -22,6 +22,20 @@ const productsInqury = catchAsync(async (req, res) => {
   });
 });
 
+const productDetailInqury = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  if (!productId) {
+    return res.status(400).json({ message: "KEY_ERROR" });
+  }
+  const productDetailInqury = await productService.productDetailInqury(
+    productId
+  );
+
+  return res.status(200).json({
+    data: productDetailInqury,
+  });
+});
+
 const createProduct = async (req, res) => {
   try {
     const { productName, stock, price, thumbnail, categoryId } = req.body;
@@ -49,4 +63,5 @@ const createProduct = async (req, res) => {
 module.exports = {
   productsInqury,
   createProduct,
+  productDetailInqury,
 };
