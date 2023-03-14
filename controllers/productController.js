@@ -29,7 +29,7 @@ const productDetailInqury = catchAsync(async (req, res) => {
   }
   const product = await productService.productDetailInqury(productId);
 
-  if (product.productId == null) {
+  if (!product.productId) {
     return res.status(404).json({ message: "PRODUCT_NOT_FOUND" });
   }
 
