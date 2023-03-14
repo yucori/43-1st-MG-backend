@@ -27,6 +27,27 @@ const showProducts = async (categoryId, limit, offset) => {
   }
 };
 
+const newProduct = async (productName, stock, price, thumbnail, categoryId) => {
+  try {
+    return await appDataSource.query(
+      `INSERT INTO products(
+        name,
+        stock,
+        price,
+        thumbnail,
+        category_id
+      )VALUES(?, ?, ?, ?, ?);
+      `,
+      [productName, stock, price, thumbnail, categoryId]
+    );
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
 module.exports = {
   showProducts,
+  newProduct,
 };
