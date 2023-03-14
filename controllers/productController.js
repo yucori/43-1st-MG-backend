@@ -27,12 +27,14 @@ const productDetailInqury = catchAsync(async (req, res) => {
   if (!productId) {
     return res.status(400).json({ message: "KEY_ERROR" });
   }
-  const productDetailInqury = await productService.productDetailInqury(
-    productId
-  );
+  const product = await productService.productDetailInqury(productId);
+
+  if (product.productId == null) {
+    return res.status(404).json({ message: "PRODUCT_NOT_FOUND" });
+  }
 
   return res.status(200).json({
-    data: productDetailInqury,
+    data: product,
   });
 });
 

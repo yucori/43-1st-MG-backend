@@ -54,7 +54,7 @@ const showProductDetail = async (productId) => {
     );
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
+    error.statusCode = 00;
     throw error;
   }
 };
