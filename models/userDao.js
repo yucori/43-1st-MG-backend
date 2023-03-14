@@ -79,7 +79,7 @@ const updateUser = async ( userId, password, phoneNumber, address ) => {
     return result;
   }catch(err) {
     const error = new Error('KEY ERROR')
-    error.statusCode = 500;
+    error.statusCode = 400;
     throw error;
   }
 } 

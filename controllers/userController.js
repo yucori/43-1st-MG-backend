@@ -27,10 +27,7 @@ const signUp = catchAsync(async (req, res) => {
     return res.status(400).json({ message: "KEY_ERROR" });
   }
   
-  if (password != passwordConfirm) {
-    return res.status(400).json({ message: "PASSWORD_UNMATCHED" });
-  }
-  
+
   emailValidator(email);
   passwordValidator(password);
   await userService.signUp(
