@@ -24,23 +24,6 @@ const showProducts = async (categoryId, limit, offset) => {
   }
 };
 
-const showProductNum = async () => {
-  try {
-    let query = `SELECT
-      categories.id AS categoryId,
-      categories.name AS categoryName,
-      COUNT(products.id) AS count
-    FROM categories
-    JOIN products ON products.category_id = categories.id
-    GROUP BY categories.id`;
-    return await appDataSource.query(query);
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 400;
-    throw error;
-  }
-};
-
 const showProductDetail = async (productId) => {
   try {
     return await appDataSource.query(
@@ -73,8 +56,25 @@ const showProductDetail = async (productId) => {
   }
 };
 
+const getProductList = async () => {
+  try {
+    let query = `SELECT
+      categories.id AS categoryId,
+      categories.name AS categoryName,
+      COUNT(products.id) AS count
+    FROM categories
+    JOIN products ON products.category_id = categories.id
+    GROUP BY categories.id`;
+    return await appDataSource.query(query);
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   showProducts,
   showProductDetail,
-  showProductNum,
+  getProductList,
 };

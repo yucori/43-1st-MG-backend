@@ -38,15 +38,15 @@ const productDetailInqury = catchAsync(async (req, res) => {
   });
 });
 
-const categoryProductNum = catchAsync(async (req, res) => {
-  const categoryProductNum = await productService.categoryProductNum();
+const categoryList = catchAsync(async (req, res) => {
+  const categoryList = await productService.categoryList();
   return res.status(200).json({
-    data: categoryProductNum,
+    data: categoryList,
   });
 });
 
 module.exports = {
   productsInqury,
-  categoryProductNum,
   productDetailInqury,
+  categoryList,
 };

@@ -8,12 +8,12 @@ const productDetailInqury = async (productId) => {
   return await productDao.showProductDetail(productId);
 };
 
-const categoryProductNum = async () => {
-  return await productDao.showProductNum();
+const categoryList = async () => {
+  return await productDao.getProductList();
 };
 
 module.exports = {
   productsInqury,
-  categoryProductNum,
   productDetailInqury,
+  categoryList,
 };
