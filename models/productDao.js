@@ -2,7 +2,7 @@ const { appDataSource } = require("./data-source");
 
 const showProducts = async (categoryId, limit, offset) => {
   try {
-    let params = [limit, offset];
+    let params = [];
     let query = `SELECT
           products.id AS products_id,
           products.name AS products_name,
@@ -15,9 +15,9 @@ const showProducts = async (categoryId, limit, offset) => {
 
     if (categoryId !== "0") {
       query += ` WHERE products.category_id = ?`;
-      params = [categoryId, ...params];
+      params.push(categoryId);
     }
-    query += ` ORDER BY products.id DESC LIMIT ? OFFSET ?`;
+    query += ` ORDER BY products.id DESC LIMIT ${limit} OFFSET ${offset}`;
 
     return await appDataSource.query(query, params);
   } catch (err) {
