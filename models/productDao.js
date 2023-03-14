@@ -27,19 +27,17 @@ const showProducts = async (categoryId, limit, offset) => {
   }
 };
 
-const newProduct = async (productName, stock, price, thumbnail, categoryId) => {
+const showProductNum = async (categoryId) => {
   try {
-    return await appDataSource.query(
-      `INSERT INTO products(
-        name,
-        stock,
-        price,
-        thumbnail,
-        category_id
-      )VALUES(?, ?, ?, ?, ?);
-      `,
-      [productName, stock, price, thumbnail, categoryId]
-    );
+    let query = `SELECT
+        COUNT(*) as cnt FROM products`;
+
+    if (categoryId !== "0") {
+      query += ` WHERE category_id = ?`;
+      return await appDataSource.query(query, [categoryId]);
+    } else {
+      return await appDataSource.query(query);
+    }
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
@@ -49,5 +47,5 @@ const newProduct = async (productName, stock, price, thumbnail, categoryId) => {
 
 module.exports = {
   showProducts,
-  newProduct,
+  showProductNum,
 };

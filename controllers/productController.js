@@ -22,31 +22,20 @@ const productsInqury = catchAsync(async (req, res) => {
   });
 });
 
-const createProduct = async (req, res) => {
-  try {
-    const { productName, stock, price, thumbnail, categoryId } = req.body;
-
-    if (!productName || !stock || !price || !thumbnail || !categoryId) {
-      return res.status(400).json({ message: "KEY_ERROR" });
-    }
-
-    await productService.createProduct(
-      productName,
-      stock,
-      price,
-      thumbnail,
-      categoryId
-    );
-    return res.status(201).json({
-      message: "PRODUCTS_CREATED",
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
+const categoryProductNum = catchAsync(async (req, res) => {
+  const { categoryId } = req.params;
+  if (!categoryId) {
+    return res.status(400).json({ message: "KEY_ERROR" });
   }
-};
+  const categoryProductNum = await productService.categoryProductNum(
+    categoryId
+  );
+  return res.status(200).json({
+    data: categoryProductNum,
+  });
+});
 
 module.exports = {
   productsInqury,
-  createProduct,
+  categoryProductNum,
 };
