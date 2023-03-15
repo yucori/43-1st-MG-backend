@@ -75,7 +75,7 @@ const cartInfo = catchAsync(async (req, res) => {
 
 const deleteInCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const { productId } = req.body;
+  const { productId } = req.params;
 
   await userService.deleteInCart(userId, productId);
 

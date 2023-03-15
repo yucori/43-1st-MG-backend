@@ -137,16 +137,25 @@ const getCart = async (userId) => {
 
 const deleteItem = async (userId, productId) => {
   try {
-    await appDataSource.query(
+    const result = await appDataSource.query(
       `DELETE FROM cart
       WHERE user_id = ? AND product_id = ?
     `,
       [userId, productId]
     );
+    if (result.affectedRows === 0) {
+      const error = new Error("NO_ROWS_DELETED");
+      error.statusCode = 400;
+      throw error;
+    }
   } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 400;
-    throw error;
+    if (err.code === "ER_BAD_FIELD_ERROR") {
+      const error = new Error("INVALID_DATA_INPUT");
+      error.statusCode = 400;
+      throw error;
+    } else {
+      throw err;
+    }
   }
 };
 
