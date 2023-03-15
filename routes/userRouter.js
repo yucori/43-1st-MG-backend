@@ -7,7 +7,7 @@ router.post('/signup', userController.signUp);
 router.post('/signin', userController.signIn);
 router.post('/cart', loginRequired, userController.createCart)
 router.patch('/info', loginRequired, userController.updateUserInfo)
-
+router.get('/cart/delete', loginRequired, userController.deleteAllCart)
 
 
 module.exports = {

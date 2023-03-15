@@ -56,9 +56,20 @@ const createCart = async(userId, productId, quantity) => {
   return await userDao.createIntoCart(userId, productId, quantity)
 }; 
 
+
+const updateCart = async(cartId, productId, userId, quantity) => {
+  await userDao.updateCart(userId,productId, cartId, quantity)
+}
+
+const deleteAllCart = async(userId) => {
+  await userDao.deleteAllCart(userId)
+}
+
 module.exports = {
   signUp,
   signIn,
   updatedUserInfo,
   createCart,
+  updateCart,
+  deleteAllCart
 }

@@ -1,3 +1,4 @@
+const { appDataSource } = require("../models/data-source");
 const userService = require("../services/userService");
 const { catchAsync } = require("../utils/error");
 const { emailValidator, passwordValidator } = require("../utils/validator");
@@ -87,9 +88,35 @@ const createCart = catchAsync(async (req, res) => {
 })
 
 
+const updateCart = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const cartId = req.params.cartId;
+  const {productId, quantity} = req.body;
+
+  await userService.updateCart(userId, cartId, productId, quantity)
+  return res.status(200).send({
+    message: "UPDATED_CART",
+    userId: userId,
+    cartId: cartId
+  })
+})
+
+
+const deleteAllCart = catchAsync(async(req, res) => {
+  const userId = res.user.id;
+  
+  await userService.deleteAllCart(userId)
+  return res.status(200).send({
+    message:"DELETED_ALL_CART",
+    userId: userId
+  })
+})
+
 module.exports = {
   signUp,
   signIn,
   updateUserInfo,
   createCart,
-}
+  updateCart,
+  deleteAllCart
+} 

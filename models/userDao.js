@@ -40,7 +40,7 @@ const getUserById = async (id) => {
     SELECT
       id,
       name, 
-      password, email
+      password,
       email, 
       phone_number, 
       address, 
@@ -86,10 +86,10 @@ const updateUser = async ( userId, password, phoneNumber, address ) => {
 
 const createIntoCart = async(userId, productId, quantity) => {
   try{
-    console.log(userId, productId, quantity); 
-    
     return await appDataSource.query(
-      `INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?);
+    `
+      INSERT INTO cart (user_id, product_id, quantity) 
+      VALUES (?, ?, ?);
     `,
     [userId, productId, quantity]
     );
@@ -100,10 +100,92 @@ const createIntoCart = async(userId, productId, quantity) => {
   }
 };
 
+
+
+const updateCart = async(userId, productId, cartId, quantity) => {
+  try {
+      return await appDataSource.query(
+        `
+        UPDATE
+          cart
+        SET
+          quantity=?
+        WHERE
+          products_id=?
+        AND 
+          user_id=?
+        AND 
+          id=?  
+        `
+        [userId, productId, cartId, quantity]
+      );
+    }catch(err){
+      const error = new Error("KEY_ERROR");
+      error.statusCode = 400;
+      throw error;
+    }
+}
+
+const checkExistedCart= async(productId, userId) => {
+  const result = await appDataSource.query(
+    `
+    SELECT
+      c.id As cartId,
+      p.id As productsId,
+      u.id AS userId
+    FROM 
+      cart
+    WHERE
+      products_id=?
+    AND 
+      user_id=?
+    `,
+    [productId, userId]
+  );
+  return result;    
+}
+
+
+const updateQuantityTheCart = async(quantity, productId, userId, cartId) => {
+  const result = await appDataSource.query(
+    `
+      UPDATE 
+        cart
+      SET 
+        quantity=?
+      WHERE 
+        product_id=?
+      AND 
+        user_id=?
+      AND
+        id=?        
+    `,
+    [quantity, productId, userId, cartId]
+  );
+  return result;
+}
+
+
+const deleteAllCart = async(userId) => {
+  await appDataSource.query(
+    `
+    DELETE *
+    FROM cart
+    WHERE user_id=?
+    `,
+    [userId]
+  )
+
+}
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   updateUser,
   createIntoCart,
+  updateCart,
+  checkExistedCart,
+  updateQuantityTheCart,
+  deleteAllCart
 }
