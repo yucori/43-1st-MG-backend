@@ -70,10 +70,15 @@ const deleteInCart = async (userId, productId) => {
   return await userDao.deleteItem(userId, productId);
 };
 
+const deleteAllInCart = async (userId) => {
+  return await userDao.deleteAllItem(userId);
+};
+
 module.exports = {
   signUp,
   signIn,
   updatedUserInfo,
   cartInfo,
   deleteInCart,
+  deleteAllInCart,
 };

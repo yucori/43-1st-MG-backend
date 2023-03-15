@@ -84,10 +84,21 @@ const deleteInCart = catchAsync(async (req, res) => {
   });
 });
 
+const deleteAllInCart = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+
+  await userService.deleteAllInCart(userId);
+
+  return res.status(200).json({
+    message: "cart_is_empty_now",
+  });
+});
+
 module.exports = {
   signUp,
   signIn,
   updateUserInfo,
   cartInfo,
   deleteInCart,
+  deleteAllInCart,
 };
