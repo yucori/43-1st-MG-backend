@@ -84,10 +84,26 @@ const updateUser = async ( userId, password, phoneNumber, address ) => {
   }
 } 
 
+const createIntoCart = async(userId, productId, quantity) => {
+  try{
+    console.log(userId, productId, quantity); 
+    
+    return await appDataSource.query(
+      `INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?);
+    `,
+    [userId, productId, quantity]
+    );
+  }catch(err){
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 400;
+    throw error;
+  }
+};
 
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
-  updateUser
+  updateUser,
+  createIntoCart,
 }

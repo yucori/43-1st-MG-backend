@@ -43,7 +43,6 @@ const signIn = async( email, password ) => {
  return accessToken;
 }
 
-
 const updatedUserInfo = async ( userId, password, phoneNumber, address) => {
   return await userDao.updateUser(
     userId,
@@ -53,8 +52,13 @@ const updatedUserInfo = async ( userId, password, phoneNumber, address) => {
   );
 }
 
+const createCart = async(userId, productId, quantity) => {
+  return await userDao.createIntoCart(userId, productId, quantity)
+}; 
+
 module.exports = {
   signUp,
   signIn,
-  updatedUserInfo
+  updatedUserInfo,
+  createCart,
 }

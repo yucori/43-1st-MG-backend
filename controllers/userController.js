@@ -70,9 +70,26 @@ const updateUserInfo = catchAsync(async (req, res) => {
   }
 )
 
+const createCart = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { productId, quantity } = req.body;
+
+  if (!productId || !quantity) {
+    return res.status(400).json({ message: "KEY_ERROR" });
+  }
+  await userService.createCart(userId, productId, quantity)
+  
+  return res.status(201).send({
+    message:"CREATE_CART",
+    userId : userId,
+    productId: productId
+  })
+})
+
 
 module.exports = {
   signUp,
   signIn,
-  updateUserInfo
+  updateUserInfo,
+  createCart,
 }
