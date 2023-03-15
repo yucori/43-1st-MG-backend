@@ -135,10 +135,26 @@ const getCart = async (userId) => {
   }
 };
 
+const deleteItem = async (userId, productId) => {
+  try {
+    await appDataSource.query(
+      `DELETE FROM cart
+      WHERE user_id = ? AND product_id = ?
+    `,
+      [userId, productId]
+    );
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   updateUser,
   getCart,
+  deleteItem,
 };
