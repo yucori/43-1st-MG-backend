@@ -73,9 +73,20 @@ const cartInfo = catchAsync(async (req, res) => {
   });
 });
 
+const sendOrder = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+
+  await userService.sendOrder(userId);
+
+  return res.status(201).json({
+    message: "ORDER_COMPLETED",
+  });
+});
+
 module.exports = {
   signUp,
   signIn,
   updateUserInfo,
   cartInfo,
+  sendOrder,
 };
