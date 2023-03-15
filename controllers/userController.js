@@ -26,7 +26,6 @@ const signUp = catchAsync(async (req, res) => {
   ) {
     return res.status(400).json({ message: "KEY_ERROR" });
   }
-  
 
   emailValidator(email);
   passwordValidator(password);
@@ -52,27 +51,31 @@ const signIn = catchAsync(async (req, res) => {
 
 const updateUserInfo = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const { password, phoneNumber, address} = req.body;
+  const { password, phoneNumber, address } = req.body;
 
-    if(!password || !phoneNumber || !address) {
-      const error = new Error('KEY_ERROR')
-      error.statusCode = 400;
-  
-      throw error;
-    }
-    await userService.updatedUserInfo(
-      userId,
-      password,
-      phoneNumber,
-      address
-    );
-    return res.status(200).json({ message:"UPDATE USER INFO"})
+  if (!password || !phoneNumber || !address) {
+    const error = new Error("KEY_ERROR");
+    error.statusCode = 400;
+
+    throw error;
   }
-)
+  await userService.updatedUserInfo(userId, password, phoneNumber, address);
+  return res.status(200).json({ message: "UPDATE USER INFO" });
+});
 
+const cartInfo = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+
+  const cart = await userService.cartInfo(userId);
+
+  return res.status(200).json({
+    data: cart,
+  });
+});
 
 module.exports = {
   signUp,
   signIn,
-  updateUserInfo
-}
+  updateUserInfo,
+  cartInfo,
+};
