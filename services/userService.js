@@ -1,59 +1,90 @@
-const bcrypt = require('bcrypt')
-const userDao  = require('../models/userDao')
-const jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt");
+const userDao = require("../models/userDao");
+const jwt = require("jsonwebtoken");
 
-const hashPassword = async ( plaintextPassword ) => {
+const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10;
-  const salt = await bcrypt.genSalt(saltRounds)
+  const salt = await bcrypt.genSalt(saltRounds);
 
   return await bcrypt.hash(plaintextPassword, salt);
-}
+};
 
-const signUp = async( userName, password, email, phoneNumber, address, birth, gender, point ) => {
-  const hashedPassword = await hashPassword(password)
+const signUp = async (
+  userName,
+  password,
+  email,
+  phoneNumber,
+  address,
+  birth,
+  gender,
+  point
+) => {
+  const hashedPassword = await hashPassword(password);
 
-  return userDao.createUser(userName, hashedPassword, email, phoneNumber, address, birth, gender, point)
-}
+  return userDao.createUser(
+    userName,
+    hashedPassword,
+    email,
+    phoneNumber,
+    address,
+    birth,
+    gender,
+    point
+  );
+};
 
-
-const signIn = async( email, password ) => { 
+const signIn = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
 
-  if(!user){
-    const error = new Error('INVALID_USER')
+  if (!user) {
+    const error = new Error("INVALID_USER");
     error.statusCode = 401;
 
     throw error;
   }
   const match = await bcrypt.compare(password, user.password);
 
-  if(!match){
-    const error = new Error('INVALID_USER')
+  if (!match) {
+    const error = new Error("INVALID_USER");
     error.statusCode = 401;
 
     throw error;
   }
 
-  const accessToken = jwt.sign({ id : user.id }, process.env.JWT_SECRET,
-    {
-      algorithm: process.env.ALGORITHM,
-      expiresIn: process.env.JWT_EXPIRES_IN
-    }
-  )
- return accessToken;
-}
+  const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    algorithm: process.env.ALGORITHM,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+  return accessToken;
+};
 
-const updatedUserInfo = async ( userId, password, phoneNumber, address) => {
-  return await userDao.updateUser(
-    userId,
-    password, 
-    phoneNumber,
-    address
-  );
-}
+const updatedUserInfo = async (userId, password, phoneNumber, address) => {
+  return await userDao.updateUser(userId, password, phoneNumber, address);
+};
+
+const cartInfo = async (userId) => {
+  return await userDao.getCart(userId);
+};
 
 const createCart = async(userId, productId, quantity) => {
-  return await userDao.createIntoCart(userId, productId, quantity)
+  
+  const checkExistedCart = await userDao.checkExistedCart(
+    productId,
+    userId
+  )
+
+  if(!checkExistedCart) {
+    await userDao.createIntoCart(userId, productId, quantity)
+  }
+
+  if(checkExistedCart.productId === parseInt(productId)) {
+    return await userDao.updateQuantityTheCart(
+      quantity,
+      productId,
+      userId,
+      checkExistedCart.cartId
+    )
+  } 
 }; 
 
 
@@ -69,7 +100,9 @@ module.exports = {
   signUp,
   signIn,
   updatedUserInfo,
+  cartInfo,
   createCart,
   updateCart,
   deleteAllCart
-}
+
+};

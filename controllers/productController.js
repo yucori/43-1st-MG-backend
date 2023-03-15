@@ -38,7 +38,15 @@ const productDetailInqury = catchAsync(async (req, res) => {
   });
 });
 
+const categoryList = catchAsync(async (req, res) => {
+  const categoryList = await productService.categoryList();
+  return res.status(200).json({
+    data: categoryList,
+  });
+});
+
 module.exports = {
   productsInqury,
   productDetailInqury,
+  categoryList,
 };
