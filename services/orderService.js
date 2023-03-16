@@ -1,6 +1,6 @@
 const orderDao = require("../models/orderDao");
 
-const sendOrder = async (userId) => {
+const sendOrder = async (userId, totalPrice) => {
   const { v4 } = require("uuid");
 
   const uuid = () => {
@@ -8,7 +8,7 @@ const sendOrder = async (userId) => {
     return tokens[2] + tokens[1] + tokens[0] + tokens[3];
   };
   const orderNumber = uuid();
-  return await orderDao.orderCompleted(userId, orderNumber);
+  return await orderDao.orderCompleted(userId, orderNumber, totalPrice);
 };
 
 module.exports = {
