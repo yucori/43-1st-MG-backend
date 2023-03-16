@@ -32,8 +32,38 @@ const deleteAllInCart = catchAsync(async (req, res) => {
   });
 });
 
+const createCart = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { productId, quantity } = req.body;
+  
+  if (!productId || !quantity) {
+    return res.status(400).json({ message: "KEY_ERROR" });
+  }
+  await cartService.createCart(userId, productId, quantity)
+  
+  return res.status(201).send({
+    message:"CREATE_CART",
+    userId : userId,
+    productId: productId
+  })
+})
+
+const updateCart = catchAsync(async(req, res) => {
+  const userId = req.user.id;
+  const { productId, quantity } = req.body;
+
+  await cartService.updateCart(userId, productId, quantity)
+  return res.status(200).send({
+    message:"UPDATED_CART",
+    userId : userId,
+    productId : productId
+  })
+})
+
 module.exports = {
   cartInfo,
   deleteInCart,
   deleteAllInCart,
+  createCart,
+  updateCart,
 };

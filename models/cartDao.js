@@ -79,8 +79,66 @@ const deleteAllItem = async (userId) => {
   }
 };
 
+const createIntoCart = async(userId, productId, quantity) => {
+  try{
+    return await appDataSource.query(
+      `
+      INSERT INTO cart (user_id, product_id, quantity) 
+      VALUES (?, ?, ?);
+    `, [userId, productId, quantity]
+    )
+    
+  }catch(err){
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
+const updateCart = async(userId, productId, quantity) => {
+    return await appDataSource.query(
+      `  
+      UPDATE 
+        cart 
+      SET quantity = ? 
+      WHERE 
+        product_id = ? 
+      AND 
+        user_id = ?`
+      , [quantity, productId, userId]
+    );
+}
+
+const checkExistedCart= async(productId, userId) => {
+  try {
+      const [cart] = await appDataSource.query(
+        `SELECT
+          id,
+          quantity
+        FROM 
+          cart
+        WHERE
+          product_id = ?
+        AND
+          user_id = ?
+        `,
+        [productId, userId]
+      );
+      return cart
+    } catch (err) {
+      console.log(err)
+      const error = new Error("KEY_ERROR");
+      error.statusCode = 400;
+      throw error;
+    }
+}
+
+
 module.exports = {
   getCart,
   deleteItem,
   deleteAllItem,
+  createIntoCart,
+  updateCart,
+  checkExistedCart,
 };

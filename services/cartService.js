@@ -12,8 +12,32 @@ const deleteAllInCart = async (userId) => {
   return await cartDao.deleteAllItem(userId);
 };
 
+const createCart = async(userId, productId, quantity) => {
+  const cart = await cartDao.checkExistedCart(
+    productId,
+    userId
+  )
+
+  if(!cart) {
+    return await cartDao.createIntoCart(userId, productId, quantity)
+  }
+
+  return await cartDao.updateCart(
+    cart.quantity + quantity,
+    productId,
+    userId,
+  )
+}; 
+
+const updateCart = async(userId, productId, quantity) => {
+  return await cartDao.updateCart(userId, productId, quantity)
+}
+
+
 module.exports = {
   cartInfo,
   deleteInCart,
   deleteAllInCart,
+  createCart,
+  updateCart,
 };

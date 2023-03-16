@@ -52,7 +52,7 @@ const getUserById = async (id) => {
     SELECT
       id,
       name, 
-      password, email
+      password,
       email, 
       phone_number, 
       address, 
