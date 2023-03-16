@@ -63,19 +63,8 @@ const updateUserInfo = catchAsync(async (req, res) => {
   return res.status(200).json({ message: "UPDATE USER INFO" });
 });
 
-const cartInfo = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-
-  const cart = await userService.cartInfo(userId);
-
-  return res.status(200).json({
-    data: cart,
-  });
-});
-
 module.exports = {
   signUp,
   signIn,
   updateUserInfo,
-  cartInfo,
 };
