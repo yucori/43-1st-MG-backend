@@ -96,17 +96,15 @@ const createCart = catchAsync(async (req, res) => {
 const updateCart = catchAsync(async(req, res) => {
 
   const userId = req.user.id;
-  const cartId = req.params;
-  const {productId, quantity} = req.body;
+  const { cartId }= req.params;
+  const {quantity} = req.body;
 
-  await userService.updateCart(cartId, userId, productId, quantity)
+  await userService.updateCart(userId, cartId, quantity)
   return res.status(200).send({
     message:"UPDATED_CART",
     userId : userId,
-    productId: productId
+    cartId : cartId
   })
-
-
 })
 
 module.exports = {

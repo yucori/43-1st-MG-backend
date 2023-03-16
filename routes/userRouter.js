@@ -8,7 +8,7 @@ router.post("/signin", userController.signIn);
 router.patch("/info", loginRequired, userController.updateUserInfo);
 router.get("/cart", loginRequired, userController.cartInfo);
 router.post('/cart',loginRequired,userController.createCart);
-router.patch('/cart',loginRequired, userController.updateCart);
+router.patch('/cart/:cartId',loginRequired, userController.updateCart);
 
 
 module.exports = {

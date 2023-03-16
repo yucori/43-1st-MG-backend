@@ -154,25 +154,18 @@ const getCart = async (userId) => {
 };
 
 
-const updateCart = async(quantity, productId, userId) => {
-  try {
+const updateCart = async(userId, cartId, quantity) => {
     return await appDataSource.query(
-      `
+      `  
       UPDATE 
         cart 
       SET quantity = ? 
       WHERE 
-        product_id = ? 
+        id = ? 
       AND 
         user_id = ?`
-      , [quantity, productId, userId]
+      , [quantity, cartId, userId]
     );
-  }catch(err){
-    console.log(err)
-    const error = new Error("KEY_ERROR");
-    error.statusCode = 400;
-    throw error;
-  }
 }
 
 const checkExistedCart= async(productId, userId) => {
@@ -200,29 +193,6 @@ const checkExistedCart= async(productId, userId) => {
 }
 
 
-const updateQuantityTheCart = async(quantity, productId, userId) => {
-  try {
-      return await appDataSource.query(
-        `
-        UPDATE 
-          cart
-        SET 
-          quantity=?
-        WHERE 
-          product_id=?
-        AND 
-          user_id=?      
-      `,
-      [quantity, productId, userId]
-    );    
-  } catch (err) {
-    const error = new Error("KEY_ERROR");
-    error.statusCode = 400;
-    throw error;
-  }
-}
-
-
 const deleteAllCart = async(userId) => {
   await appDataSource.query(
     `
@@ -233,6 +203,7 @@ const deleteAllCart = async(userId) => {
     [userId]
   )
 
+   
 }
 
 module.exports = {
@@ -244,6 +215,5 @@ module.exports = {
   getCart,
   updateCart,
   checkExistedCart,
-  updateQuantityTheCart,
   deleteAllCart,
 };
