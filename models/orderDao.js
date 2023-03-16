@@ -1,8 +1,13 @@
 const { appDataSource } = require("./data-source");
 
 const orderCompleted = async (userId, orderNumber, totalPrice) => {
+  const queryRunner = appDataSource.createQueryRunner();
+
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
   try {
-    let userPoint = await appDataSource.query(
+    let userPoint = await queryRunner.query(
       `SELECT point FROM users WHERE id = ?`,
       [userId]
     );
@@ -16,13 +21,13 @@ const orderCompleted = async (userId, orderNumber, totalPrice) => {
 
     const order_items = [];
 
-    await appDataSource.query(
+    await queryRunner.query(
       `INSERT INTO orders(user_id, order_number, address_id, status_info_id)
          VALUES(?, ?, 1, 1)`,
       [userId, orderNumber]
     );
 
-    const result = await appDataSource.query(
+    const result = await queryRunner.query(
       `SELECT orders.id, cart.product_id, cart.quantity
          FROM orders JOIN cart ON cart.user_id = orders.user_id
         WHERE orders.order_number = ?`,
@@ -33,24 +38,28 @@ const orderCompleted = async (userId, orderNumber, totalPrice) => {
       order_items.push([item.id, item.product_id, item.quantity]);
     });
 
-    appDataSource.query(
+    queryRunner.query(
       `INSERT INTO order_items (order_id, product_id, quantity) VALUES ?`,
       [order_items]
     );
 
     const changePoint = userPoint - totalPrice;
 
-    await appDataSource.query(`UPDATE users SET point = ? WHERE id = ?`, [
+    await queryRunner.query(`UPDATE users SET point = ? WHERE id = ?`, [
       changePoint,
       userId,
     ]);
 
-    await appDataSource.query(`DELETE FROM cart WHERE user_id = ?`, [userId]);
+    await queryRunner.query(`DELETE FROM cart WHERE user_id = ?`, [userId]);
+
+    await queryRunner.commitTransaction();
   } catch (err) {
     if (err.code === "ER_BAD_FIELD_ERROR") {
+      await queryRunner.rollbackTransaction();
       const error = new Error("INVLID_DATA_INPUT");
       error.statusCode = 400;
     } else {
+      await queryRunner.rollbackTransaction();
       throw err;
     }
   }
