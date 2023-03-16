@@ -23,10 +23,10 @@ const createCart = async(userId, productId, quantity) => {
   }
 
   return await cartDao.updateCart(
-    cart.quantity + quantity,
-    productId,
     userId,
-  )
+    productId,
+    cart.quantity + quantity
+    )
 }; 
 
 const updateCart = async(userId, productId, quantity) => {
