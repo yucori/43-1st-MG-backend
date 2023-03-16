@@ -62,49 +62,8 @@ const updatedUserInfo = async (userId, password, phoneNumber, address) => {
   return await userDao.updateUser(userId, password, phoneNumber, address);
 };
 
-const cartInfo = async (userId) => {
-  return await userDao.getCart(userId);
-};
-
-const createCart = async(userId, productId, quantity) => {
-  const cart = await userDao.checkExistedCart(
-    productId,
-    userId
-  )
-
-  if(!cart) {
-    return await userDao.createIntoCart(userId, productId, quantity)
-  }
-
-  return await userDao.updateCart(
-    cart.quantity + quantity,
-    productId,
-    userId,
-  )
-}; 
-
-
-const getUserCart = async(userId) => {
-  const user = await userDao.getUserById(userId);
-  return user.cart;
-}
-
-const updateCart = async(userId, cartId, quantity) => {
-  return await userDao.updateCart(userId, cartId, quantity)
-}
-
-const deleteAllCart = async(userId) => {
-  await userDao.deleteAllCart(userId)
-}
-
 module.exports = {
   signUp,
   signIn,
   updatedUserInfo,
-  cartInfo,
-  createCart,
-  getUserCart,
-  updateCart,
-  deleteAllCart
-
 };

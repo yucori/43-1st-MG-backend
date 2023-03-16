@@ -64,54 +64,8 @@ const updateUserInfo = catchAsync(async (req, res) => {
   return res.status(200).json({ message: "UPDATE USER INFO" });
 });
 
-
-const cartInfo = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-
-  const cart = await userService.cartInfo(userId);
-
-  return res.status(200).json({
-    data: cart,
-  });
-});
-
-
-const createCart = catchAsync(async (req, res) => {
-  const userId = req.user.id;
-  const { productId, quantity } = req.body;
-  
-  if (!productId || !quantity) {
-    return res.status(400).json({ message: "KEY_ERROR" });
-  }
-  await userService.createCart(userId, productId, quantity)
-  
-  return res.status(201).send({
-    message:"CREATE_CART",
-    userId : userId,
-    productId: productId
-  })
-})
-
-
-const updateCart = catchAsync(async(req, res) => {
-
-  const userId = req.user.id;
-  const { cartId }= req.params;
-  const {quantity} = req.body;
-
-  await userService.updateCart(userId, cartId, quantity)
-  return res.status(200).send({
-    message:"UPDATED_CART",
-    userId : userId,
-    cartId : cartId
-  })
-})
-
 module.exports = {
   signUp,
   signIn,
   updateUserInfo,
-  cartInfo,
-  createCart,
-  updateCart,
 };
