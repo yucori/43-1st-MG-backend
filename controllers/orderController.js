@@ -1,11 +1,11 @@
 const orderService = require("../services/orderService");
 const { catchAsync } = require("../utils/error");
 
-const sendOrder = catchAsync(async (req, res) => {
+const createOrder = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { totalPrice } = req.body;
 
-  await orderService.sendOrder(userId, totalPrice);
+  await orderService.createOrder(userId, totalPrice);
 
   return res.status(201).json({
     message: "ORDER_COMPLETED",
@@ -13,5 +13,5 @@ const sendOrder = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  sendOrder,
+  createOrder,
 };
