@@ -1,4 +1,3 @@
-
 const userService = require("../services/userService");
 const { catchAsync } = require("../utils/error");
 const { emailValidator, passwordValidator } = require("../utils/validator");
