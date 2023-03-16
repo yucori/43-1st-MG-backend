@@ -62,13 +62,8 @@ const updatedUserInfo = async (userId, password, phoneNumber, address) => {
   return await userDao.updateUser(userId, password, phoneNumber, address);
 };
 
-const cartInfo = async (userId) => {
-  return await userDao.getCart(userId);
-};
-
 module.exports = {
   signUp,
   signIn,
   updatedUserInfo,
-  cartInfo,
 };
