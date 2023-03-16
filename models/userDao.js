@@ -100,41 +100,13 @@ const updateUser = async (userId, password, phoneNumber, address) => {
 
 const createIntoCart = async(userId, productId, quantity) => {
   try{
-    const product = await appDataSource.query(
+    return await appDataSource.query(
       `
-      SELECT *
-      FROM products
-      WHERE 
-        user_id=?
-      AND 
-        product_id=?
-      `,
-      [userId, productId]
+      INSERT INTO cart (user_id, product_id, quantity) 
+      VALUES (?, ?, ?);
+    `, [userId, productId, quantity]
     )
-
-    if(product.length > 0) {
-      await appDataSource.query(
-        `
-        UPDATE cart
-        SET 
-          qauntity=? 
-        WHERE 
-          user_id=?
-        AND 
-          product_id=?
-        `,
-        [product[0].quantity + quantity, userId, productId]
-      );
-    }else{
-      await appDataSource.query(
-        `
-        INSERT INTO cart (user_id, product_id, quantity) 
-        FROM cart
-        VALUES (?, ?, ?);
-      `,
-      [userId, productId, quantity]
-      )
-    }
+    
   }catch(err){
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 400;
@@ -184,44 +156,43 @@ const getCart = async (userId) => {
 
 const updateCart = async(quantity, productId, userId) => {
   try {
-      return await appDataSource.query(
-        `
-        UPDATE
-          cart
-        SET
-          quantity=?
-        WHERE
-          products_id=?
-        AND 
-          user_id=?
-        `
-        [quantity, productId, userId]
-      );
-    }catch(err){
-      const error = new Error("KEY_ERROR");
-      error.statusCode = 400;
-      throw error;
-    }
+    return await appDataSource.query(
+      `
+      UPDATE 
+        cart 
+      SET quantity = ? 
+      WHERE 
+        product_id = ? 
+      AND 
+        user_id = ?`
+      , [quantity, productId, userId]
+    );
+  }catch(err){
+    console.log(err)
+    const error = new Error("KEY_ERROR");
+    error.statusCode = 400;
+    throw error;
+  }
 }
 
 const checkExistedCart= async(productId, userId) => {
   try {
-      return await appDataSource.query(
-        `
-        SELECT
-          c.id As cartId,
-          p.id As productsId,
-          u.id AS userId
+      const [cart] = await appDataSource.query(
+        `SELECT
+          id,
+          quantity
         FROM 
           cart
         WHERE
-          products_id=?
-        AND 
-          user_id=?
+          product_id = ?
+        AND
+          user_id = ?
         `,
         [productId, userId]
-        );
+      );
+      return cart
     } catch (err) {
+      console.log(err)
       const error = new Error("KEY_ERROR");
       error.statusCode = 400;
       throw error;
@@ -229,7 +200,7 @@ const checkExistedCart= async(productId, userId) => {
 }
 
 
-const updateQuantityTheCart = async(quantity, productId, userId, cartId) => {
+const updateQuantityTheCart = async(quantity, productId, userId) => {
   try {
       return await appDataSource.query(
         `
@@ -240,11 +211,9 @@ const updateQuantityTheCart = async(quantity, productId, userId, cartId) => {
         WHERE 
           product_id=?
         AND 
-          user_id=?
-        AND
-          id=?        
+          user_id=?      
       `,
-      [quantity, productId, userId, cartId]
+      [quantity, productId, userId]
     );    
   } catch (err) {
     const error = new Error("KEY_ERROR");

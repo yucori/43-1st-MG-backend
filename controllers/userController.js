@@ -79,7 +79,7 @@ const cartInfo = catchAsync(async (req, res) => {
 const createCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { productId, quantity } = req.body;
-
+  
   if (!productId || !quantity) {
     return res.status(400).json({ message: "KEY_ERROR" });
   }

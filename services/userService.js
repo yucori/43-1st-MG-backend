@@ -68,28 +68,28 @@ const cartInfo = async (userId) => {
 
 const createCart = async(userId, productId, quantity) => {
   
-  const checkExistedCart = await userDao.checkExistedCart(
+  const cart = await userDao.checkExistedCart(
     productId,
     userId
   )
 
-  if(!checkExistedCart) {
-    await userDao.createIntoCart(userId, productId, quantity)
+  if(!cart) {
+    return await userDao.createIntoCart(userId, productId, quantity)
   }
 
-  if(checkExistedCart.productId === parseInt(productId)) {
-    return await userDao.updateQuantityTheCart(
-      quantity,
-      productId,
-      userId,
-      checkExistedCart.cartId
-    )
-  } 
+  return await userDao.updateCart(
+    cart.quantity + quantity,
+    productId,
+    userId,
+  )
+  
 }; 
 
 
-const updateCart = async(cartId, productId, userId, quantity) => {
-  await userDao.updateCart(userId,productId, cartId, quantity)
+const updateCart = async(quantity, productId, userId) => {
+  const cart = await user
+  return await userDao.updateCart(
+    cart.quantity + quantity, productId, userId)
 }
 
 const deleteAllCart = async(userId) => {
