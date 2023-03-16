@@ -111,6 +111,7 @@ const getCart = async (userId) => {
           "productName", products.name,
           "quantity", cart.quantity,
           "productThumbnail", products.thumbnail,
+          "price", products.price,
           "discountedPrice",
           CASE
             WHEN (cart.quantity BETWEEN 1 AND 4) THEN products.price
