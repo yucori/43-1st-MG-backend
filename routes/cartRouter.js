@@ -4,8 +4,8 @@ const { loginRequired } = require("../utils/auth");
 const router = express.Router();
 
 router.get("", loginRequired, cartController.cartInfo);
-router.get("/delete/:productId", loginRequired, cartController.deleteInCart);
-router.get("/deleteAll", loginRequired, cartController.deleteAllInCart);
+router.delete("", loginRequired, cartController.deleteInCart);
+router.delete("/all", loginRequired, cartController.deleteAllInCart);
 
 module.exports = {
   router,
