@@ -6,7 +6,7 @@
 
 - 윤수빈 (BE)
 - 장지원 (BE)(Product Manager)
-  ![Backend-repo](https://github.com/wecode-bootcamp-korea/43-1st-MG-backend)
+  [Backend-repo](https://github.com/wecode-bootcamp-korea/43-1st-MG-backend)
 
 ### Front-End Developsers
 
