@@ -20,10 +20,9 @@ const orderCompleted = async (userId, orderNumber, totalPrice) => {
     }
 
     const order_items = [];
-
     await queryRunner.query(
-      `INSERT INTO orders(user_id, order_number, address_id, status_info_id)
-         VALUES(?, ?, 1, 1)`,
+      `INSERT INTO orders(user_id, order_number, status_info_id)
+         VALUES(?, ?, 1)`,
       [userId, orderNumber]
     );
 
@@ -58,6 +57,7 @@ const orderCompleted = async (userId, orderNumber, totalPrice) => {
       await queryRunner.rollbackTransaction();
       const error = new Error("INVLID_DATA_INPUT");
       error.statusCode = 400;
+      throw err;
     } else {
       await queryRunner.rollbackTransaction();
       throw err;
