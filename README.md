@@ -9,7 +9,7 @@
 - 장지원 (BE)(Product Manager)
 
 ### Front-End Developsers
-[Frontend-repo]()
+[Frontend-repo](https://github.com/wecode-bootcamp-korea/43-1st-MG-frontend)
 
 - 김진평 (FE)(Project Manager)
 - 문은빈 (FE)
