@@ -2,11 +2,11 @@
 
 # Developers
 
-### Back-End Developers
+### Back-End Developers[Backend-repo](https://github.com/wecode-bootcamp-korea/43-1st-MG-backend)
 
 - 윤수빈 (BE)
 - 장지원 (BE)(Product Manager)
-[Backend-repo](https://github.com/wecode-bootcamp-korea/43-1st-MG-backend)
+
 
 ### Front-End Developsers
 
