@@ -9,6 +9,7 @@
 - 장지원 (BE)(Product Manager)
 
 ### Front-End Developsers
+[Frontend-repo]()
 
 - 김진평 (FE)(Project Manager)
 - 문은빈 (FE)
